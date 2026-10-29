@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Marked: a daily habit tracker for students, with a personal Habit ID. Private, no sign-up.">
+<meta name="theme-color" content="#1c2452" id="themeColor">
+<title>Marked: daily habits with a personal ID</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="css/style.css">
+<link rel="preload" href="fonts/bricolage-grotesque-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+  /* Set the theme before the page paints so there is no light/dark flash. */
+  try {
+    var t = localStorage.getItem("marked.theme");
+    if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    document.documentElement.dataset.theme = t;
+  } catch (e) { document.documentElement.dataset.theme = "light"; }
+</script>
+</head>
+<body>
+<main>
+  <header class="top">
+    <div><p class="sub" id="today"></p><h1 id="greeting"></h1></div>
+    <button class="theme" id="themeBtn" type="button">Dark</button>
+  </header>
+
+  <section class="view" id="v-today">
+    <div class="tally" id="tally" aria-live="polite">
+      <div class="tally-num"><b id="doneCount">0</b><span>/<span id="totalCount">0</span></span></div>
+      <p class="tally-text" id="tallyText"></p>
+    </div>
+    <div class="bar" aria-hidden="true"><i id="barFill"></i></div>
+    <form id="addForm" autocomplete="off">
+      <div class="row-form">
+        <input id="habitInput" type="text" maxlength="60" placeholder="New habit" aria-label="New habit">
+        <button class="btn" type="submit">Add</button>
+      </div>
+      <div class="repeat" id="repeat" role="group" aria-label="Repeat on"><span>Repeat</span></div>
+    </form>
+    <p class="error" id="error" role="alert"></p>
+    <div class="chips" id="chips" aria-label="Starter habits"></div>
+    <ul id="list"></ul>
+    <p class="rest" id="rest"></p>
+    <p class="win" id="win"></p>
+  </section>
+
+  <section class="view" id="v-insights" hidden>
+    <h2>Last 7 days</h2>
+    <div class="week" id="week"></div>
+    <h2>Last 12 weeks</h2>
+    <div class="heat" id="heat" aria-label="Consistency heatmap"></div>
+    <div class="facts" id="facts"></div>
+    <p class="note" id="insight"></p>
+  </section>
+
+  <section class="view" id="v-id" hidden>
+    <div class="tilt" id="tilt"><canvas id="card" width="800" height="500" aria-label="Your Habit ID card"></canvas></div>
+    <div class="badges" id="badges"></div>
+    <div class="actions">
+      <button class="btn" id="dlCard" type="button">Download ID</button>
+      <button class="btn ghost" id="editProfile" type="button">Edit profile</button>
+      <button class="btn ghost" id="backup" type="button">Backup</button>
+      <button class="btn ghost" id="restore" type="button">Restore</button>
+      <input type="file" id="file" accept="application/json" hidden>
+    </div>
+    <p class="privacy">Your data stays on this device. Nothing is sent to a server, and there is no tracking. Your ID image has your name on it, so share it only if you want to. <a href="privacy.html">Read the privacy page</a>.</p>
+    <div class="actions"><button class="btn danger" id="wipe" type="button">Delete all my data</button></div>
+  </section>
+</main>
+
+<div id="toast" hidden><span id="toastText"></span><button id="toastBtn" type="button">Undo</button></div>
+
+<nav class="tabs" id="tabs" aria-label="Sections">
+  <button data-view="today" aria-selected="true">Today</button>
+  <button data-view="insights" aria-selected="false">Insights</button>
+  <button data-view="id" aria-selected="false">My ID</button>
+</nav>
+
+<dialog id="profileDlg">
+  <form id="profileForm" method="dialog" autocomplete="off">
+    <h2 style="margin-top:0">Make your Habit ID</h2>
+    <p class="sub">Takes ten seconds. It never leaves your phone.</p>
+    <label for="pName">Your name</label><input id="pName" maxlength="24" required>
+    <label for="pCollege">College</label><input id="pCollege" maxlength="40" value="VIT Pune">
+    <label for="pBranch">Branch and year</label><input id="pBranch" maxlength="30" placeholder="ENTC, 1st year">
+    <label for="pWhy">What are you building yourself into?</label><input id="pWhy" maxlength="50" placeholder="Someone who ships things">
+    <button class="btn" style="margin-top:18px;width:100%" type="submit">Save my ID</button>
+  </form>
+</dialog>
+
+<script src="js/store.js"></script>
+<script src="js/idcard.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
